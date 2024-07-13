@@ -40,6 +40,12 @@ class DriverViewModel(private val driverRepository: DriverRepository):ViewModel(
     private val _showDialog = MutableStateFlow(false)
     val showDialog = _showDialog.asStateFlow()
 
+    private val _showUpdateDialog = MutableStateFlow(false)
+    val showUpdateDialog = _showUpdateDialog.asStateFlow()
+
+    private val _driverToUpdateName = MutableStateFlow("")
+    val driverToUpdateName: StateFlow<String> = _driverToUpdateName.asStateFlow()
+
     init {
         getDrivers()
     }
@@ -92,6 +98,18 @@ class DriverViewModel(private val driverRepository: DriverRepository):ViewModel(
         }
     }
 
+    fun updateDriver(driver: DriverRequest){
+        viewModelScope.launch {
+            uiState = _uiState.Loading
+            uiState = try{
+                driverRepository.updateDriver(driver)
+                _uiState.Success(driverRepository.getDrivers())
+            } catch (e: Exception) {
+                _uiState.Error
+            }
+        }
+    }
+
     fun deleteDriver(name:String?){
         viewModelScope.launch {
             try {
@@ -114,6 +132,15 @@ class DriverViewModel(private val driverRepository: DriverRepository):ViewModel(
     }
 
     fun hideDialog(){
+        _showDialog.value = false
+    }
+
+    fun showUpdateDialog(name:String){
+        _driverToUpdateName.value = name
+        _showDialog.value = true
+    }
+
+    fun hideUpdateDialog(){
         _showDialog.value = false
     }
 

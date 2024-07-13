@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,7 +40,8 @@ fun ListScreen(
         items(drivers) { driverRequest ->
             ListItem(
                 driverRequest = driverRequest,
-                onClick = { viewModel.deleteDriver(driverRequest.name) }
+                onClick1 = { viewModel.deleteDriver(driverRequest.name) },
+                onClick2 = { viewModel.showUpdateDialog(driverRequest.name) }
             )
         }
     }
@@ -66,7 +68,8 @@ fun ListScreen(
 fun ListItem(
     driverRequest: DriverRequest,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick1: () -> Unit = {},
+    onClick2: (String) -> Unit = {}
 ) {
     Card(
         modifier = modifier
@@ -85,7 +88,10 @@ fun ListItem(
                 Text(text = driverRequest.name)
                 Text(text = "${driverRequest.wins} wins, ${driverRequest.titles} titles")
             }
-            IconButton(onClick = onClick) {
+            IconButton(onClick = { onClick2(driverRequest.name) }) {
+                Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+            }
+            IconButton(onClick = onClick1) {
                 Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
             }
         }

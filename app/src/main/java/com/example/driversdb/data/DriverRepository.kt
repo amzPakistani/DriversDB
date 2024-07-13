@@ -10,6 +10,7 @@ interface DriverRepository {
     suspend fun getDriver(name: String?): DriverRequest
     suspend fun createDriver(driver: DriverRequest): DriverResponse
     suspend fun deleteDriver(name: String?): ResponseBody
+    suspend fun updateDriver(driver: DriverRequest): DriverResponse
 }
 
 class DriverRepositoryImpl(private val apiService: ApiService):DriverRepository {
@@ -17,4 +18,5 @@ class DriverRepositoryImpl(private val apiService: ApiService):DriverRepository 
     override suspend fun getDriver(name: String?): DriverRequest = apiService.getDriver(name)
     override suspend fun createDriver(driver: DriverRequest): DriverResponse = apiService.createDriver(driver)
     override suspend fun deleteDriver(name: String?): ResponseBody = apiService.deleteDriver(name)
+    override suspend fun updateDriver(driver: DriverRequest): DriverResponse = apiService.updateDriver(driver)
 }

@@ -22,4 +22,7 @@ interface ApiService {
 
     @DELETE("delete-driver")
     suspend fun deleteDriver(@Query("name") name: String?): ResponseBody
+
+    @POST("update-driver")
+    suspend fun updateDriver(@Body driver: DriverRequest): DriverResponse
 }

@@ -15,13 +15,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import com.example.driversdb.ui.DriverViewModel
 import com.example.driversdb.ui._uiState
+import com.example.driversdb.ui.screens.dialogs.DriverDialog
+import com.example.driversdb.ui.screens.dialogs.UpdateDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,6 +29,8 @@ fun NavigationScreen(uiState:_uiState, viewModel: DriverViewModel){
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackbarHostState = remember{SnackbarHostState()}
     val showDialog by viewModel.showDialog.collectAsState()
+    val showUpdateDialog by viewModel.showUpdateDialog.collectAsState()
+
 
     Scaffold(
         floatingActionButton = {
@@ -52,6 +54,9 @@ fun NavigationScreen(uiState:_uiState, viewModel: DriverViewModel){
         HomeScreen(uiState = uiState, paddingValues = paddingValues, viewModel = viewModel, snackbarHostState = snackbarHostState)
         if(showDialog){
             DriverDialog(viewModel = viewModel)
+        }
+        if(showUpdateDialog){
+            UpdateDialog(viewModel = viewModel)
         }
     }
 }
