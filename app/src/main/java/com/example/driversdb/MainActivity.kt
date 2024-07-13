@@ -11,20 +11,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelProvider
+import com.example.driversdb.ui.DriverViewModel
+import com.example.driversdb.ui.screens.HomeScreen
 import com.example.driversdb.ui.theme.DriversDBTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        lateinit var viewModel: DriverViewModel
+
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this, DriverViewModel.Factory).get(DriverViewModel::class.java)
         enableEdgeToEdge()
         setContent {
             DriversDBTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                HomeScreen(uiState = viewModel.uiState)
             }
         }
     }
