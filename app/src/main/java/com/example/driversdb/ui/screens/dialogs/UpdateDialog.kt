@@ -36,7 +36,7 @@ fun UpdateDialog(viewModel: DriverViewModel) {
 
 
     AlertDialog(
-        onDismissRequest = { viewModel.hideDialog() },
+        onDismissRequest = { viewModel.hideUpdateDialog() },
         title = { Text("Update Driver", modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp), textAlign = TextAlign.Start)
@@ -65,17 +65,17 @@ fun UpdateDialog(viewModel: DriverViewModel) {
         confirmButton = {
             Button(
                 onClick = {
-                    viewModel.createDriver(
-                        DriverRequest(name = viewModel.driverToUpdateName.toString(), titles = driverTitle, wins = driverWins)
+                    viewModel.updateDriver(
+                        DriverRequest(name = viewModel.driverToUpdateName.value, titles = driverTitle, wins = driverWins)
                     )
-                    viewModel.hideDialog()
+                    viewModel.hideUpdateDialog()
                 }
             ) {
-                Text(text = "Add")
+                Text(text = "Update")
             }
         },
         dismissButton = {
-            Button(onClick = { viewModel.hideDialog() }) {
+            Button(onClick = { viewModel.hideUpdateDialog() }) {
                 Text("Cancel")
             }
         }

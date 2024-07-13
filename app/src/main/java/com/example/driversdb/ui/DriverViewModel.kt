@@ -98,14 +98,17 @@ class DriverViewModel(private val driverRepository: DriverRepository):ViewModel(
         }
     }
 
-    fun updateDriver(driver: DriverRequest){
+    fun updateDriver(driver: DriverRequest) {
         viewModelScope.launch {
             uiState = _uiState.Loading
-            uiState = try{
+            try {
                 driverRepository.updateDriver(driver)
-                _uiState.Success(driverRepository.getDrivers())
+                val updatedDrivers = driverRepository.getDrivers()
+                uiState = _uiState.Success(updatedDrivers)
+                Log.d("DriverViewModel", "Driver updated successfully: ${driver.name}")
             } catch (e: Exception) {
-                _uiState.Error
+                uiState = _uiState.Error
+                Log.e("DriverViewModel", "Error updating driver: ${e.message} Details: ${driver.name} ${driver.wins} ${driver.titles}")
             }
         }
     }
@@ -137,11 +140,11 @@ class DriverViewModel(private val driverRepository: DriverRepository):ViewModel(
 
     fun showUpdateDialog(name:String){
         _driverToUpdateName.value = name
-        _showDialog.value = true
+        _showUpdateDialog.value = true
     }
 
     fun hideUpdateDialog(){
-        _showDialog.value = false
+        _showUpdateDialog.value = false
     }
 
     fun resetDeleteAlert() {
