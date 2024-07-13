@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,9 +20,9 @@ import com.example.driversdb.ui.DriverViewModel
 import com.example.driversdb.ui._uiState
 
 @Composable
-fun HomeScreen(uiState: _uiState, paddingValues: PaddingValues, viewModel: DriverViewModel) {
+fun HomeScreen(uiState: _uiState, paddingValues: PaddingValues, viewModel: DriverViewModel, snackbarHostState: SnackbarHostState) {
     when(uiState){
-        is _uiState.Success -> ListScreen(uiState.drivers, paddingValues = paddingValues, viewModel = viewModel)
+        is _uiState.Success -> ListScreen(uiState.drivers, paddingValues = paddingValues, viewModel = viewModel, snackbarHostState = snackbarHostState)
         is _uiState.Loading -> LoadingScreen()
         is _uiState.Error -> ErrorScreen()
     }

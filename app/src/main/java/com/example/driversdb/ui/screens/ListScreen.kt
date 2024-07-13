@@ -12,8 +12,14 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,7 +32,8 @@ fun ListScreen(
     drivers: List<DriverRequest>,
     viewModel: DriverViewModel,
     modifier: Modifier = Modifier,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    snackbarHostState: SnackbarHostState
 ) {
     LazyColumn(modifier = modifier.padding(paddingValues)) {
         items(drivers) { driverRequest ->
@@ -34,6 +41,23 @@ fun ListScreen(
                 driverRequest = driverRequest,
                 onClick = { viewModel.deleteDriver(driverRequest.name) }
             )
+        }
+    }
+
+    val showDeleteAlert by viewModel.showDeleteAlert.collectAsState()
+    val driverName by viewModel.DriverName.collectAsState()
+
+    if(showDeleteAlert){
+        LaunchedEffect(key1 = showDeleteAlert) {
+            val result = snackbarHostState.showSnackbar(
+                message = "${driverName} is deleted",
+                actionLabel = "Dismiss",
+                duration = SnackbarDuration.Long
+            )
+            if (result == SnackbarResult.ActionPerformed) {
+                snackbarHostState.currentSnackbarData?.dismiss()
+            }
+            viewModel.resetDeleteAlert()
         }
     }
 }
@@ -51,10 +75,13 @@ fun ListItem(
     ) {
         Row(
             modifier = modifier
-                .fillMaxWidth().padding(8.dp),
+                .fillMaxWidth()
+                .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier.padding(8.dp).weight(1f)) {
+            Column(modifier = Modifier
+                .padding(8.dp)
+                .weight(1f)) {
                 Text(text = driverRequest.name)
                 Text(text = "${driverRequest.wins} wins, ${driverRequest.titles} titles")
             }

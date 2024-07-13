@@ -12,6 +12,9 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.driversdb.DriverApplication
 import com.example.driversdb.data.DriverRepository
 import com.example.driversdb.network.request.DriverRequest
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -27,6 +30,15 @@ sealed interface _uiState{
 class DriverViewModel(private val driverRepository: DriverRepository):ViewModel() {
     var uiState:_uiState by mutableStateOf(_uiState.Loading)
         private set
+
+    private val _showDeleteAlert = MutableStateFlow(false)
+    val showDeleteAlert: StateFlow<Boolean> = _showDeleteAlert.asStateFlow()
+
+    private val _driverName = MutableStateFlow("")
+    val DriverName: StateFlow<String> = _driverName.asStateFlow()
+
+    private val _showDialog = MutableStateFlow(false)
+    val showDialog = _showDialog.asStateFlow()
 
     init {
         getDrivers()
@@ -86,12 +98,27 @@ class DriverViewModel(private val driverRepository: DriverRepository):ViewModel(
                 driverRepository.deleteDriver(name)
                 val updatedDrivers = driverRepository.getDrivers()
                 uiState = _uiState.Success(updatedDrivers)
+                _showDeleteAlert.value = true
+                if(name!=null){
+                    _driverName.value = name
+                }
             } catch (e: Exception) {
                 uiState = _uiState.Error
                 Log.e("DriverViewModel", "Error deleting driver: ${e.message}")
-                // Optionally handle the error internally without affecting the UI state
             }
         }
+    }
+
+    fun showDialog(){
+        _showDialog.value = true
+    }
+
+    fun hideDialog(){
+        _showDialog.value = false
+    }
+
+    fun resetDeleteAlert() {
+        _showDeleteAlert.value = false
     }
 
     companion object{
