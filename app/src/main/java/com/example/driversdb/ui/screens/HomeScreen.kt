@@ -3,6 +3,7 @@ package com.example.driversdb.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -18,10 +19,9 @@ import com.example.driversdb.ui.DriverViewModel
 import com.example.driversdb.ui._uiState
 
 @Composable
-fun HomeScreen(uiState: _uiState) {
-
+fun HomeScreen(uiState: _uiState, paddingValues: PaddingValues, viewModel: DriverViewModel) {
     when(uiState){
-        is _uiState.Success -> ListScreen(uiState.drivers)
+        is _uiState.Success -> ListScreen(uiState.drivers, paddingValues = paddingValues, viewModel = viewModel)
         is _uiState.Loading -> LoadingScreen()
         is _uiState.Error -> ErrorScreen()
     }

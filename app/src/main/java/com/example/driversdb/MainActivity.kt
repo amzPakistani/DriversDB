@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             DriversDBTheme {
-                HomeScreen(uiState = viewModel.uiState)
+                NavigationScreen(uiState = viewModel.uiState, viewModel = viewModel)
             }
         }
     }

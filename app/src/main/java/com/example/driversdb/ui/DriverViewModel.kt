@@ -35,18 +35,24 @@ class DriverViewModel(private val driverRepository: DriverRepository):ViewModel(
     fun getDrivers(){
         viewModelScope.launch {
             uiState = _uiState.Loading
-            uiState = try {
-                _uiState.Success(driverRepository.getDrivers())
-            } catch (
-                e: HttpException
-            ) {
-                _uiState.Error
+            try {
+                val drivers = driverRepository.getDrivers()
+                uiState = _uiState.Success(drivers)
+            } catch (e: HttpException) {
+                Log.e("DriverViewModel", "HTTP error: ${e.message()}")
+                uiState = _uiState.Error
             } catch (e: UnknownHostException) {
-                _uiState.Error
+                Log.e("DriverViewModel", "No internet connection: ${e.message}")
+                uiState = _uiState.Error
             } catch (e: SocketTimeoutException) {
-                _uiState.Error
+                Log.e("DriverViewModel", "Connection timed out: ${e.message}")
+                uiState = _uiState.Error
             } catch (e: IOException) {
-                _uiState.Error
+                Log.e("DriverViewModel", "IO error: ${e.message}")
+                uiState = _uiState.Error
+            } catch (e: Exception) {
+                Log.e("DriverViewModel", "Error: ${e.message}")
+                uiState = _uiState.Error
             }
         }
     }
@@ -58,6 +64,32 @@ class DriverViewModel(private val driverRepository: DriverRepository):ViewModel(
                 _uiState.Success(listOf(driverRepository.getDriver(name)))
             } catch (e: Exception) {
                 _uiState.Error
+            }
+        }
+    }
+
+    fun createDriver(driver: DriverRequest){
+        viewModelScope.launch {
+            uiState = _uiState.Loading
+            uiState = try{
+                driverRepository.createDriver(driver)
+                _uiState.Success(driverRepository.getDrivers())
+            } catch (e: Exception) {
+                _uiState.Error
+            }
+        }
+    }
+
+    fun deleteDriver(name:String?){
+        viewModelScope.launch {
+            try {
+                driverRepository.deleteDriver(name)
+                val updatedDrivers = driverRepository.getDrivers()
+                uiState = _uiState.Success(updatedDrivers)
+            } catch (e: Exception) {
+                uiState = _uiState.Error
+                Log.e("DriverViewModel", "Error deleting driver: ${e.message}")
+                // Optionally handle the error internally without affecting the UI state
             }
         }
     }
