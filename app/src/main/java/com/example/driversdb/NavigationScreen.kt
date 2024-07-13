@@ -22,7 +22,7 @@ fun NavigationScreen(uiState:_uiState, viewModel: DriverViewModel){
         modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection),
 
         topBar = {
-            LargeTopAppBar(
+            TopAppBar(
                 title = { Text("Drivers DB") },
                 scrollBehavior = scrollBehavior
             )
