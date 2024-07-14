@@ -69,6 +69,7 @@ fun UpdateDialog(viewModel: DriverViewModel) {
                         DriverRequest(name = viewModel.driverToUpdateName.value, titles = driverTitle, wins = driverWins)
                     )
                     viewModel.hideUpdateDialog()
+                    viewModel.showUpdateAlert()
                 }
             ) {
                 Text(text = "Update")

@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.driversdb.network.request.DriverRequest
 import com.example.driversdb.ui.DriverViewModel
+import com.example.driversdb.ui.screens.dialogs.Snackbar
 
 
 @Composable
@@ -47,20 +48,20 @@ fun ListScreen(
     }
 
     val showDeleteAlert by viewModel.showDeleteAlert.collectAsState()
+    val showUpdateAlert by viewModel.showUpdateAlert.collectAsState()
+    val showCreateAlert by viewModel.showCreateAlert.collectAsState()
     val driverName by viewModel.DriverName.collectAsState()
 
     if(showDeleteAlert){
-        LaunchedEffect(key1 = showDeleteAlert) {
-            val result = snackbarHostState.showSnackbar(
-                message = "${driverName} is deleted",
-                actionLabel = "Dismiss",
-                duration = SnackbarDuration.Long
-            )
-            if (result == SnackbarResult.ActionPerformed) {
-                snackbarHostState.currentSnackbarData?.dismiss()
-            }
-            viewModel.resetDeleteAlert()
-        }
+        Snackbar(snackbarHostState = snackbarHostState, condition = showDeleteAlert, message = "${driverName} was deleted", dismiss = { viewModel.resetDeleteAlert() })
+    }
+
+    if(showUpdateAlert){
+        Snackbar(snackbarHostState = snackbarHostState, condition = showUpdateAlert, message = "${driverName} was updated", dismiss = { viewModel.resetUpdateAlert() })
+    }
+
+    if(showCreateAlert){
+        Snackbar(snackbarHostState = snackbarHostState, condition = showCreateAlert, message = "${driverName} was added", dismiss = { viewModel.resetCreateAlert() })
     }
 }
 

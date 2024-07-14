@@ -81,6 +81,7 @@ fun DriverDialog(viewModel: DriverViewModel) {
                         DriverRequest(name = driverName, titles = driverTitle, wins = driverWins)
                     )
                     viewModel.hideDialog()
+                    viewModel.showCreateAlert()
                 }
             ) {
                 Text(text = "Add")

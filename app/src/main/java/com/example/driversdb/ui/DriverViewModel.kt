@@ -34,6 +34,13 @@ class DriverViewModel(private val driverRepository: DriverRepository):ViewModel(
     private val _showDeleteAlert = MutableStateFlow(false)
     val showDeleteAlert: StateFlow<Boolean> = _showDeleteAlert.asStateFlow()
 
+    private val _showCreateAlert = MutableStateFlow(false)
+    val showCreateAlert: StateFlow<Boolean> = _showCreateAlert.asStateFlow()
+
+    private val _showUpdateAlert = MutableStateFlow(false)
+    val showUpdateAlert: StateFlow<Boolean> = _showUpdateAlert.asStateFlow()
+
+
     private val _driverName = MutableStateFlow("")
     val DriverName: StateFlow<String> = _driverName.asStateFlow()
 
@@ -86,14 +93,18 @@ class DriverViewModel(private val driverRepository: DriverRepository):ViewModel(
         }
     }
 
-    fun createDriver(driver: DriverRequest){
+    fun createDriver(driver: DriverRequest) {
         viewModelScope.launch {
             uiState = _uiState.Loading
-            uiState = try{
+            try {
                 driverRepository.createDriver(driver)
-                _uiState.Success(driverRepository.getDrivers())
+                val updatedDrivers = driverRepository.getDrivers()
+                uiState = _uiState.Success(updatedDrivers)
+                Log.d("DriverViewModel", "Driver created successfully: ${driver.name}")
+                _driverName.value = driver.name
             } catch (e: Exception) {
-                _uiState.Error
+                uiState = _uiState.Error
+                Log.e("DriverViewModel", "Error creating driver: ${e.message}")
             }
         }
     }
@@ -106,6 +117,7 @@ class DriverViewModel(private val driverRepository: DriverRepository):ViewModel(
                 val updatedDrivers = driverRepository.getDrivers()
                 uiState = _uiState.Success(updatedDrivers)
                 Log.d("DriverViewModel", "Driver updated successfully: ${driver.name}")
+                _driverName.value = driver.name
             } catch (e: Exception) {
                 uiState = _uiState.Error
                 Log.e("DriverViewModel", "Error updating driver: ${e.message} Details: ${driver.name} ${driver.wins} ${driver.titles}")
@@ -149,6 +161,22 @@ class DriverViewModel(private val driverRepository: DriverRepository):ViewModel(
 
     fun resetDeleteAlert() {
         _showDeleteAlert.value = false
+    }
+
+    fun resetUpdateAlert() {
+        _showUpdateDialog.value = false
+    }
+
+    fun resetCreateAlert() {
+        _showCreateAlert.value = false
+    }
+
+    fun showCreateAlert() {
+        _showCreateAlert.value = true
+    }
+
+    fun showUpdateAlert() {
+        _showUpdateAlert.value = true
     }
 
     companion object{
