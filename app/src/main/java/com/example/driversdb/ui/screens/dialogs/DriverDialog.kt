@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -42,9 +43,13 @@ fun DriverDialog(viewModel: DriverViewModel) {
 
     AlertDialog(
         onDismissRequest = { viewModel.hideDialog() },
-        title = { Text("Add Driver", modifier = Modifier
-            .fillMaxWidth()
-            .padding( 8.dp), textAlign = TextAlign.Start)},
+        title = {
+            Text(
+                "Add Driver", modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp), textAlign = TextAlign.Start, fontWeight = FontWeight.SemiBold
+            )
+        },
         modifier = Modifier.fillMaxWidth(),
         text = {
             Column {
@@ -53,7 +58,10 @@ fun DriverDialog(viewModel: DriverViewModel) {
                     onValueChange = { driverName = it },
                     label = { Text(text = "Driver's Name") },
                     modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-                    keyboardOptions = KeyboardOptions.Default.copy(capitalization = KeyboardCapitalization.Words, keyboardType = KeyboardType.Text)
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        capitalization = KeyboardCapitalization.Words,
+                        keyboardType = KeyboardType.Text
+                    )
 
                 )
                 TextField(

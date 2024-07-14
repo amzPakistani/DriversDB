@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -37,9 +38,12 @@ fun UpdateDialog(viewModel: DriverViewModel) {
 
     AlertDialog(
         onDismissRequest = { viewModel.hideUpdateDialog() },
-        title = { Text("Update Driver", modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp), textAlign = TextAlign.Start)
+        title = {
+            Text(
+                "Update Driver", modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp), textAlign = TextAlign.Start, fontWeight = FontWeight.SemiBold
+            )
         },
         modifier = Modifier.fillMaxWidth(),
         text = {
@@ -66,7 +70,11 @@ fun UpdateDialog(viewModel: DriverViewModel) {
             Button(
                 onClick = {
                     viewModel.updateDriver(
-                        DriverRequest(name = viewModel.driverToUpdateName.value, titles = driverTitle, wins = driverWins)
+                        DriverRequest(
+                            name = viewModel.driverToUpdateName.value,
+                            titles = driverTitle,
+                            wins = driverWins
+                        )
                     )
                     viewModel.hideUpdateDialog()
                     viewModel.showUpdateAlert()
