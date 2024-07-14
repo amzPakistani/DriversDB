@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -23,7 +24,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.driversdb.network.request.DriverRequest
 import com.example.driversdb.ui.DriverViewModel
 import com.example.driversdb.ui.screens.dialogs.Snackbar
@@ -86,8 +89,8 @@ fun ListItem(
             Column(modifier = Modifier
                 .padding(8.dp)
                 .weight(1f)) {
-                Text(text = driverRequest.name)
-                Text(text = "${driverRequest.wins} wins, ${driverRequest.titles} titles")
+                Text(text = driverRequest.name, fontWeight = FontWeight.Normal, fontSize = 20.sp)
+                Text(text = "${driverRequest.wins} wins, ${driverRequest.titles} titles",modifier = Modifier.padding(4.dp))
             }
             IconButton(onClick = { onClick2(driverRequest.name) }) {
                 Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
