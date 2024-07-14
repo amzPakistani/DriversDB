@@ -5,7 +5,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.example.driversdb.ui.DriverViewModel
 
 @Composable
 fun Snackbar(
@@ -23,7 +22,7 @@ fun Snackbar(
         )
         if (result == SnackbarResult.ActionPerformed) {
             snackbarHostState.currentSnackbarData?.dismiss()
-            dismiss()
         }
+        dismiss()
     }
 }
